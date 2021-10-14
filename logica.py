@@ -1,5 +1,5 @@
 # Constantes:
-from random import randint, triangular
+from random import randint
 
 ANCHO_TABLERO = 4
 ALTO_TABLERO = 4
@@ -19,35 +19,41 @@ def inicializar_juego():
     for i in range(ALTO_TABLERO):
         fila = []
         for j in range(ANCHO_TABLERO):
-            fila.append(0)
+            fila.append(VACIO)
         tablero.append(fila)
-    insertar_nuevo_random(tablero)
-    
-    return tablero
+    new_tablero = insertar_nuevo_random(tablero)
+
+    return new_tablero
+
 
 def mostrar_juego(juego):
     indice = 0
     for i in range(ALTO_TABLERO):
         print("\n", "-" * CANTIDAD_BARRAS_HORIZONTALES)
-        for j in range(4):
-            print("|", end = " ")
+        for j in range(ANCHO_TABLERO):
+            print("|", end=" ")
             if juego[i][j] == VACIO:
-                print(" ", end = " ")
+                print(" ", end=" ")
             else:
-                print(juego[i][j], end = " ")
+                print(juego[i][j], end=" ")
         print("|")
     print("", "-"*CANTIDAD_BARRAS_HORIZONTALES)
 
     for movs in LISTA_DE_MOVIMEINTOS:
-        print(f"Apriete {movs} para moverse hacia {LISTA_DE_MOVIMEINTOS_STR[indice]}")
+        print(
+            f"Apriete {movs} para moverse hacia {LISTA_DE_MOVIMEINTOS_STR[indice]}")
         indice += 1
+
 
 def primer_juego(juego):
     for i in range(ALTO_TABLERO):
         for j in range(ANCHO_TABLERO):
             if juego[i][j] != 0:
-                return False  
+                return False
+            else:
+                continue
     return True
+
 
 def posicion_vacia(juego, i, j):
     if juego[i][j] == VACIO:
@@ -55,10 +61,23 @@ def posicion_vacia(juego, i, j):
     return False
 
 
+def copiador(juego):
+    new_juego = []
+    for i in range(ALTO_TABLERO):
+        fila = []
+        for j in range(ANCHO_TABLERO):
+            fila.append(juego[i][j])
+
+        new_juego.append(fila)
+    return new_juego
+
+
 def insertar_nuevo_random(juego):
+    new_juego = copiador(juego)
+
     random_pos_i = randint(0, 3)
     random_pos_j = randint(0, 3)
-    
+
     if primer_juego(juego):
         random_pos_i2 = randint(0, 3)
         random_pos_j2 = randint(0, 3)
@@ -67,15 +86,16 @@ def insertar_nuevo_random(juego):
             random_pos_i2 = randint(0, 3)
             random_pos_j2 = randint(0, 3)
 
-        juego[random_pos_i][random_pos_j] = 2
-        juego[random_pos_i2][random_pos_j2] = 2
-        return 
-    
-    while not posicion_vacia(juego, random_pos_i, random_pos_j):
-        random_pos_i = randint(0, 3) 
+        new_juego[random_pos_i][random_pos_j] = 2
+        new_juego[random_pos_i2][random_pos_j2] = 2
+        return new_juego
+
+    while not posicion_vacia(new_juego, random_pos_i, random_pos_j):
+        random_pos_i = randint(0, 3)
         random_pos_j = randint(0, 3)
 
-    juego[random_pos_i][random_pos_j] = 2 
+    new_juego[random_pos_i][random_pos_j] = 2
+    return new_juego
 
 
 def juego_ganado(juego):
@@ -85,6 +105,7 @@ def juego_ganado(juego):
                 return True
     return False
 
+
 def espacios_libres(juego):
     for i in range(ALTO_TABLERO):
         for j in range(ANCHO_TABLERO):
@@ -92,20 +113,22 @@ def espacios_libres(juego):
                 return True
     return False
 
+
 def movimientos_disponibles(juego):
-    #en j
+    # en j
     for i in range(ALTO_TABLERO):
         for j in range(ANCHO_TABLERO - 1):
-            if juego [i][j] == juego[i][j + 1]:
+            if juego[i][j] == juego[i][j + 1]:
                 return True
-    #en i
+    # en i
     for i in range(ALTO_TABLERO - 1):
         for j in range(ANCHO_TABLERO):
-            if juego [i][j] == juego[i + 1][j]:
+            if juego[i][j] == juego[i + 1][j]:
                 return True
 
     return False
-            
+
+
 def juego_perdido(juego):
     if not espacios_libres(juego):
         if not movimientos_disponibles(juego):
@@ -113,6 +136,7 @@ def juego_perdido(juego):
         else:
             return False
     return False
+
 
 def transponer(juego):
     new_tablero = []
@@ -133,21 +157,38 @@ def invertir(juego):
         new_tablero.append(fila)
     return new_tablero
 
+
+def sumar_a_la_derecha(juego):
+    new_juego = copiador(juego)
+    for i in range(ALTO_TABLERO):
+        for j in range(ANCHO_TABLERO - 1):  # estamos yendo para la derecha
+            if new_juego[i][j] == new_juego[i][j + 1] or new_juego[i][j + 1] == 0:
+                new_juego[i][j + 1] += new_juego[i][j]
+                new_juego[i][j] = VACIO
+    return new_juego
+
+
 def moverse_derecha(juego):
-    pass
-    
+    for _ in range(int(ANCHO_TABLERO / 2)):
+        juego_modificado = sumar_a_la_derecha(juego)
+    return juego_modificado
+
+
 def moverse_abajo(juego):
     "transpone la matriz, la mueve a la derecha y la vuelve a transponer"
     new_juego = transponer(juego)
     new_juego = moverse_derecha(new_juego)
-    return transponer(new_juego)
-    
+    new_juego = transponer(new_juego)
+    return new_juego
+
 
 def moverse_izquierda(juego):
     "invierte la matriz, la mueve la a derecha y la vuelve a invertir"
     new_juego = invertir(juego)
     new_juego = moverse_derecha(new_juego)
-    return invertir(juego)
+    new_juego = invertir(new_juego)
+    return new_juego
+
 
 def moverse_arriba(juego):
     """
@@ -160,15 +201,19 @@ def moverse_arriba(juego):
     new_juego = invertir(new_juego)
     new_juego = moverse_derecha(new_juego)
     new_juego = invertir(new_juego)
-    return transponer(new_juego)
+    new_juego = transponer(new_juego)
+    return new_juego
 
-    
+
 def pedir_direccion(juego):
     direcciones_soportadas = (ARRIBA, IZQUIERDA, ABAJO, DERECHA)
-    dir = input("""Ingrese la dir a la que se quiere mover("W", "A", "S", "D")""").upper()
+    dir = input(
+        """Ingrese la dir a la que se quiere mover("W", "A", "S", "D")""").upper()
     while not dir in direcciones_soportadas:
-        dir = input("""No es un movimiento. Ingrese la direccion a la que se quiere mover("W", "A", "S", "D")""").upper()
+        dir = input(
+            """No es un movimiento. Ingrese la direccion a la que se quiere mover("W", "A", "S", "D")""").upper()
     return dir
+
 
 def actualizar_juego(juego, dir):
     """
@@ -186,10 +231,7 @@ def actualizar_juego(juego, dir):
         return moverse_izquierda(juego)
 
     elif dir == ABAJO:
-       return moverse_abajo(juego)
+        return moverse_abajo(juego)
 
     elif dir == ARRIBA:
-        return moverse_arriba
-    
-
-    
+        return moverse_arriba(juego)
