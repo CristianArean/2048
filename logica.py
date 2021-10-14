@@ -43,8 +43,8 @@ def mostrar_juego(juego):
         indice += 1
 
 def primer_juego(juego):
-    for i in range(4):
-        for j in range(4):
+    for i in range(ALTO_TABLERO):
+        for j in range(ANCHO_TABLERO):
             if juego[i][j] != 0:
                 return False  
     return True
@@ -56,7 +56,6 @@ def posicion_vacia(juego, i, j):
 
 
 def insertar_nuevo_random(juego):
-    """COPIA LA MATRIZ Y AGREGA EN UNA POSICION ALEATORIA UN 2 O 4"""
     random_pos_i = randint(0, 3)
     random_pos_j = randint(0, 3)
     
@@ -94,13 +93,12 @@ def espacios_libres(juego):
     return False
 
 def movimientos_disponibles(juego):
-
-    #en x
+    #en j
     for i in range(ALTO_TABLERO):
         for j in range(ANCHO_TABLERO - 1):
             if juego [i][j] == juego[i][j + 1]:
                 return True
-    #en y
+    #en i
     for i in range(ALTO_TABLERO - 1):
         for j in range(ANCHO_TABLERO):
             if juego [i][j] == juego[i + 1][j]:
