@@ -145,7 +145,6 @@ def transponer(juego):
         for j in range(ANCHO_TABLERO):
             fila.append(juego[j][i])
         new_tablero.append(fila)
-    print(mostrar_juego(new_tablero))
     return new_tablero
 
 
