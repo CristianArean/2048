@@ -182,7 +182,6 @@ def sumar_a_la_derecha(juego):
 
 
 def moverse_derecha(juego):
-    # for _ in range(int(ANCHO_TABLERO / 2)):
     juego_modificado = sumar_a_la_derecha(juego)
     return juego_modificado
 
