@@ -163,25 +163,19 @@ def sumar_a_la_derecha(juego):
     new_juego = copiador(juego)
     for i in range(ALTO_TABLERO):
         for j in range(ANCHO_TABLERO - 1, 0, -1):  # estamos yendo para la derecha
-            #print("printeo j", j)
             indice = 1
             while (j - indice) >= 0 and new_juego[i][j - indice] == VACIO:
-                indice += 1 
-            #print("printeado", indice, "ACA", i, j)
-            #if new_juego[i][j] == new_juego[i][j - 1] or new_juego[i][j - 1] == 0 or new_juego[i][j] == 0:
+                indice += 1
             if (j - indice) >= 0 and new_juego[i][j] == new_juego[i][j - indice]:
-                #print("primer print", indice, "ACA", i, j)
                 new_juego[i][j] += new_juego[i][j - indice]
                 new_juego[i][j - indice] = VACIO
 
-        for x in range(ANCHO_TABLERO - 1, -1, -1):
-            #print("printeo x", x)
+        for x in range(ANCHO_TABLERO - 1, -1, -1):  # corro los ceros
             indice = 1
-            while (x + indice) < ANCHO_TABLERO and new_juego[i][x + indice] == VACIO: 
+            while (x + indice) < ANCHO_TABLERO and new_juego[i][x + indice] == VACIO:
                 indice += 1
             indice -= 1
 
-            print(indice, "ACA", i, x)
             if (x + indice) < ANCHO_TABLERO and new_juego[i][x + indice] == VACIO:
                 new_juego[i][x + indice] = new_juego[i][x]
                 new_juego[i][x] = VACIO
@@ -189,7 +183,7 @@ def sumar_a_la_derecha(juego):
 
 
 def moverse_derecha(juego):
-    #for _ in range(int(ANCHO_TABLERO / 2)):
+    # for _ in range(int(ANCHO_TABLERO / 2)):
     juego_modificado = sumar_a_la_derecha(juego)
     return juego_modificado
 
