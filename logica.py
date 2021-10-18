@@ -50,8 +50,6 @@ def primer_juego(juego):
         for j in range(ANCHO_TABLERO):
             if juego[i][j] != 0:
                 return False
-            else:
-                continue
     return True
 
 
@@ -133,8 +131,6 @@ def juego_perdido(juego):
     if not espacios_libres(juego):
         if not movimientos_disponibles(juego):
             return True
-        else:
-            return False
     return False
 
 
@@ -181,15 +177,11 @@ def sumar_a_la_derecha(juego):
     return new_juego
 
 
-def moverse_derecha(juego):
-    juego_modificado = sumar_a_la_derecha(juego)
-    return juego_modificado
-
 
 def moverse_abajo(juego):
     "transpone la matriz, la mueve a la derecha y la vuelve a transponer"
     new_juego = transponer(juego)
-    new_juego = moverse_derecha(new_juego)
+    new_juego = sumar_a_la_derecha(new_juego)
     new_juego = transponer(new_juego)
     return new_juego
 
@@ -197,7 +189,7 @@ def moverse_abajo(juego):
 def moverse_izquierda(juego):
     "invierte la matriz, la mueve la a derecha y la vuelve a invertir"
     new_juego = invertir(juego)
-    new_juego = moverse_derecha(new_juego)
+    new_juego = sumar_a_la_derecha(new_juego)
     new_juego = invertir(new_juego)
     return new_juego
 
@@ -211,7 +203,7 @@ def moverse_arriba(juego):
     la transpone de vuelta"""
     new_juego = transponer(juego)
     new_juego = invertir(new_juego)
-    new_juego = moverse_derecha(new_juego)
+    new_juego = sumar_a_la_derecha(new_juego)
     new_juego = invertir(new_juego)
     new_juego = transponer(new_juego)
     return new_juego
@@ -237,7 +229,7 @@ def actualizar_juego(juego, dir):
     - Trasponer el tablero resultante si es necesario
     """
     if dir == DERECHA:
-        return moverse_derecha(juego)
+        return sumar_a_la_derecha(juego)
 
     elif dir == IZQUIERDA:
         return moverse_izquierda(juego)
