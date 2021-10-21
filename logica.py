@@ -22,6 +22,7 @@ def inicializar_juego():
             fila.append(VACIO)
         tablero.append(fila)
     new_tablero = insertar_nuevo_random(tablero)
+    new_tablero = insertar_nuevo_random(new_tablero)
 
     return new_tablero
 
@@ -75,18 +76,6 @@ def insertar_nuevo_random(juego):
 
     random_pos_i = randint(0, 3)
     random_pos_j = randint(0, 3)
-
-    if primer_juego(juego):
-        random_pos_i2 = randint(0, 3)
-        random_pos_j2 = randint(0, 3)
-
-        while random_pos_i == random_pos_i2 and random_pos_j == random_pos_j2:
-            random_pos_i2 = randint(0, 3)
-            random_pos_j2 = randint(0, 3)
-
-        new_juego[random_pos_i][random_pos_j] = 2
-        new_juego[random_pos_i2][random_pos_j2] = 2
-        return new_juego
 
     while not posicion_vacia(new_juego, random_pos_i, random_pos_j):
         random_pos_i = randint(0, 3)
