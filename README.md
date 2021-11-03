@@ -5,4 +5,4 @@
 ### How to play it?
 Open a terminal in the folder and run the main file by using:
 
-$python3 main.py
+$ python3 main.py
